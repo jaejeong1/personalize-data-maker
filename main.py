@@ -4,7 +4,7 @@ import time
   
 categories = {
     'user' : ['USER_ID', 'AGE', 'GENDER', 'MEMBERSHIP_STATUS'],
-    'item' : ['ITEM_ID', 'PRICE', 'CATEGORY_L1', 'CATEGORY_L2', 'CATEGORY_L3', 'TIMESTAMP', 'RATING'],
+    'item' : ['ITEM_ID', 'PRICE', 'CATEGORY_L1', 'CATEGORY_L2', 'CATEGORY_L3', 'AGE', 'GENDER', 'TIMESTAMP', 'RATING'],
     'user-item' : ['USER_ID', 'ITEM_ID', 'TIMESTAMP', 'EVENT_TYPE']
 }
 
@@ -21,7 +21,7 @@ for x in range(number_user_id):
 # age
 ages = [10, 20, 30, 40, 50, 60]
 random_ages = random.choices(ages, [10, 20, 50, 50, 20, 10], k=number_user_id)
-list_age = list(map(str,[random.randint(1, 9) + i for i in random_ages]))
+list_age = list(map(str,[i for i in random_ages]))
 
 # gender
 genders = ['M', 'F']
@@ -70,18 +70,19 @@ list_product_category = [
     ['일상용품', '화장품', '남성화장품'],
 ]
 list_ITEM_ID = []
-list_product_line = []
+list_food_line = []
+list_beauty_line = []
 with open('data_food.txt', 'r') as f:
     lines = f.readlines()
     list_product_line = list(map(lambda s: s.strip(), lines))
 
 with open('data_beauty.txt', 'r') as f:
     lines = f.readlines()
-    list_product_line.extend(list(map(lambda s: s.strip(), lines)))
+    list_beauty_line.extend(list(map(lambda s: s.strip(), lines)))
         
 with open('data_item.csv', 'w') as f:
     f.write(','.join(categories['item']) + '\n') # Category
-
+    
     idx = 0
     
     for line in list_product_line:
@@ -89,7 +90,16 @@ with open('data_item.csv', 'w') as f:
         for product in line.split(','):
             product = product.strip()
             list_ITEM_ID.append(product)
-            f.write(','.join([product, '1000', category[0], category[1], category[2], timestamp, str(random.randint(1, 5))]) + '\n')
+            f.write(','.join([product, '1000', category[0], category[1], category[2], '0', 'null', timestamp, str(random.randint(1, 5))]) + '\n')
+        idx += 1
+
+    for line in list_beauty_line:
+        category = list_product_category[idx]
+        for product in line.split(','):
+            gender = 'M' if '남성' in product else 'F'
+            product = product.strip()
+            list_ITEM_ID.append(product)
+            f.write(','.join([product, '1000', category[0], category[1], category[2], str(random.choice([10, 20, 30, 40, 50, 60])), gender, timestamp, str(random.randint(1, 5))]) + '\n')
         idx += 1
 
 # USER_ITEM
