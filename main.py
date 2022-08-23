@@ -1,8 +1,8 @@
 import string
 import random
 import time
-  
-categories = {
+
+categories = { # 데이터 전체 카테고리
     'user' : ['USER_ID', 'AGE', 'GENDER', 'MEMBERSHIP_STATUS'],
     'item' : ['ITEM_ID', 'PRICE', 'CATEGORY_L1', 'CATEGORY_L2', 'CATEGORY_L3', 'AGE', 'GENDER', 'TIMESTAMP', 'RATING'],
     'user-item' : ['USER_ID', 'ITEM_ID', 'TIMESTAMP', 'EVENT_TYPE']
@@ -10,17 +10,17 @@ categories = {
 
 # USER
 # user_id
-length_user_id = 5
-number_user_id = 100
+length_user_id = 5 # 생성될 user id의 길이
+number_user_id = 100 # 생성될 user id의 갯수
 list_user_id = []
 timestamp = str(int(time.time()))
 
-for x in range(number_user_id):
+for x in range(number_user_id): # 랜덤 문자열(영문+숫자) 생성해 user id로 만듬
     list_user_id.append(''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(length_user_id)))
 
 # age
-ages = [10, 20, 30, 40, 50, 60]
-random_ages = random.choices(ages, [10, 20, 50, 50, 20, 10], k=number_user_id)
+ages = [10, 20, 30, 40, 50, 60] # 연령대는 10 ~ 60 범위
+random_ages = random.choices(ages, [10, 20, 50, 50, 20, 10], k=number_user_id) # 생성될 user id의 갯수만큼 10~60 범위에서 샘플링
 list_age = list(map(str,[i for i in random_ages]))
 
 # gender
@@ -59,12 +59,6 @@ list_product_category = [
     ['가공식품', '통조림', '수산물'],
     ['가공식품', '통조림', '축산물'],
     ['가공식품', '통조림', '기타'],
-    ['일상용품', '위생용품', '면도위생용품'],
-    ['일상용품', '화장품', '스킨케어화장품'],
-    ['일상용품', '화장품', '메이크업화장품'],
-    ['일상용품', '화장품', '헤어케어화장품'],
-    ['일상용품', '화장품', '네일케어화장품'],
-    ['일상용품', '화장품', '면도용화장품'],
     ['일상용품', '화장품', '방향용화장품'],
     ['일상용품', '화장품', '체취방지용화장품'],
     ['일상용품', '화장품', '남성화장품'],
@@ -105,6 +99,7 @@ with open('data_item.csv', 'w') as f:
 # USER_ITEM
 length_user_item = 20000
 event_type = ['View', 'AddToCart', 'Purchase', 'Search']
+# 실사용 환경 조성위해 이벤트 종류를 가중치를 두어 샘플링
 list_event_type = random.choices(event_type, [50, 20, 10, 20], k=length_user_item)
 list_user_id = random.choices(list_user_id, k=length_user_item)
 list_ITEM_ID = random.choices(list_ITEM_ID, k=length_user_item)
